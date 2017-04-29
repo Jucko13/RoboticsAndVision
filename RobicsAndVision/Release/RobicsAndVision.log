@@ -1,2 +1,0 @@
-﻿  RobicsAndVision.cpp
-LINK : fatal error LNK1181: cannot open input file 'opencv_core310.lib'
