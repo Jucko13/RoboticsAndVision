@@ -2,26 +2,46 @@
 //
 
 #include "stdafx.h"
-#include <opencv/cv.h>
+#include <opencv/cv.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 #include <opencv2/highgui.hpp>
+#include <iostream>
 
 using namespace cv;
 using namespace std;
+
+VideoCapture cap(0); //0 is the camera on the pc. Higher number is different camera. Insert filename to play video frame by frame
 
 
 int main()
 {
 
-	Mat test = Mat(30,30, CV_8UC3, Scalar(255,255,0));
+	namedWindow("Camera Window", WINDOW_AUTOSIZE);
 
-	circle(test, Point(15,15),6, Scalar(0,0,255),1);
+	if (cap.isOpened()) {
+		while (1) {
+			Mat image;
 
-	namedWindow("Display window", WINDOW_AUTOSIZE);
+			cap.read(image);
 
-	imshow("Display window", test);
+			if (!image.empty()) {
 
-	waitKey(0);
+				circle(image, Point(15, 15), 6, Scalar(0, 0, 255), 1); //color is in BGR format NOT RGB!
+				putText(image, "This is some text", Point(30, 30), FONT_HERSHEY_PLAIN, 1, Scalar(255, 0, 255));
+
+				imshow("Camera Window", image);
+				waitKey(10); //just a simple delay. Enter 0 for infinite wait till keypress
+			} else {
+				cout << "End of the file or camera disconnected!" << endl;
+				system("Pause");
+			}
+
+		}
+
+	} else {
+		cout << "Could not open camera or file!" << endl;
+		system("Pause");
+	}
 
     return 0;
 }
